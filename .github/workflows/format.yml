@@ -1,21 +1,23 @@
-name: auto-format
-on:
-  push:
-
 jobs:
   format:
-    runs-on: ubuntu-latest
-    if: ${{ false }} 
+    if: ${{ false }}
+    runs-on: self-hosted
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.3
-        with:
-          prettier_options: --tab-width 4 --print-width 110 --write **/**/*.java
-          prettier_version: "2.8.8"
-          only_changed: True
-          commit_message:  "auto-format"
-          prettier_plugins: "prettier-plugin-java"
+    - continue-on-error: true
+      name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - continue-on-error: true
+      name: Prettify code
+      uses: creyD/prettier_action@v4.3
+      with:
+        commit_message: auto-format
+        only_changed: true
+        prettier_options: --tab-width 4 --print-width 110 --write **/**/*.java
+        prettier_plugins: prettier-plugin-java
+        prettier_version: 2.8.8
+name: auto-format
+on:
+  repository_dispatch:
+    types: trigger-ga___format.yml
